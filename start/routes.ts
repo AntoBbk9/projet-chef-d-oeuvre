@@ -8,7 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
-import UsersController from '../app/controllers/users_controller.js'
+const UsersController = () => import ('#controllers/users_controller')
 
 router.get('/', async () => {
   return {
@@ -17,8 +17,5 @@ router.get('/', async () => {
 })
 
 router.group(() => {
-  router.get('/login', async ({ view }) => {
-    return view.render('pages/login')}).as('login')
-    router.post('/login', [UsersController, 'store']).as('login.store')
-
-}).as('auth')
+  router.post('/login', [UsersController, 'store'])
+}).prefix('api')

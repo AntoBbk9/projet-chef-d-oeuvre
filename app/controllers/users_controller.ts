@@ -15,7 +15,21 @@ export default class UsersController {
         const user = await Parent.verifyCredentials(email, password)
         await auth.use('web').login(user)
 
-        return response.redirect().toPath('/')
-    }
+        const parent = await Parent.find(1)
+
+        await parent?.load('user')
+
+        console.log(parent?.user?.name)
+
+
+        return response.json({
+            message: 'Authentification réussie',
+            user: {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+            },
+          })
+        }     
     
 }
