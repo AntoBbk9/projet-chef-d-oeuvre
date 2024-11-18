@@ -12,8 +12,8 @@ export default class extends BaseSchema {
       table.string('sexe').notNullable()
       table.date('dateDeNaissance').notNullable()
       table.string('lieu-de-naissance').notNullable()
-      table.integer('parent_id').nullable()
-      table.foreign('parent_id').references('parents.id').onDelete('CASCADE').onUpdate('CASCADE')
+      table.integer('user_id').nullable()
+      table.foreign('user_id').references('users.id').onDelete('CASCADE').onUpdate('CASCADE')
 
 
 

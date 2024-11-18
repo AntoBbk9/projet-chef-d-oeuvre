@@ -1,35 +1,33 @@
-import Parent from '#models/parent'
 import type { HttpContext } from '@adonisjs/core/http'
-import { loginValidator } from '../validators/auth.js'
+import { loginValidator, registerValidator } from '../validators/auth.js'
+import User from '../models/user.js'
+import { log } from 'console';
 
 export default class UsersController {
-    public async index({ response }: HttpContext) {
-        const users = await Parent.all()
+  async register({ request, response, auth  }: HttpContext) {
+    const data = await request.validateUsing(registerValidator)
+    log('validation successful, creating user');
     
-        return response.json(users)
-      }
+    const user = await User.create(data)
 
-    async store({ request, response, auth }: HttpContext) {
+    await auth.use('web').login(user)
+
+    return response.redirect().toPath('/login')
+} 
+
+    async login({ request, response, auth }: HttpContext) {
         const { email, password } = await request.validateUsing(loginValidator)
 
-        const user = await Parent.verifyCredentials(email, password)
+        const user = await User.verifyCredentials(email, password)
         await auth.use('web').login(user)
 
-        const parent = await Parent.find(1)
+        return response.redirect().toPath('/')
+    }
 
-        await parent?.load('user')
+    async logout({ response, auth }: HttpContext) {
+      await auth.use('web').logout()
 
-        console.log(parent?.user?.name)
-
-
-        return response.json({
-            message: 'Authentification réussie',
-            user: {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-            },
-          })
-        }     
+      return response.redirect().toPath('/')
+    }
     
 }

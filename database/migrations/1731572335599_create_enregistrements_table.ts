@@ -29,8 +29,8 @@ export default class extends BaseSchema {
       table.string('certificat-de-naissance-enfant').notNullable()
       table.string('certificat-de-naissance-papa').notNullable()
       table.string('certificat-de-naissance-maman').notNullable()
-      table.integer('parent_id').nullable()
-      table.foreign('parent_id').references('parents.id').onDelete('CASCADE').onUpdate('CASCADE')
+      table.integer('user_id').nullable()
+      table.foreign('user_id').references('users.id').onDelete('CASCADE').onUpdate('CASCADE')
       table.integer('nouveauNés_id').nullable()
       table.foreign('nouveauNés_id').references('nouveau_nés.id').onDelete('CASCADE').onUpdate('CASCADE')
 
